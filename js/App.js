@@ -6,13 +6,12 @@ import {
   Text,
   Navigator,
   Image,
-  TextInput,
   TouchableHighlight,
 } from 'react-native'
 
-import AttachmentGrid from './containers/AttachmentGrid'
-import MailDetail from './containers/MailDetail'
 import SideBar from './components/SideBar'
+import AttachmentView from './containers/AttachmentView'
+import MailDetail from './containers/MailDetail'
 
 const menuImg = require('../res/menu.png')
 const backImg = require('../res/back.png')
@@ -39,25 +38,21 @@ class App extends Component {
   }
   _renderScene(route, navigator) {
     if (route.index === 0) {
-          let sideBar = this.state.showSideBar ? (<SideBar styles={styles.leftPanel}></SideBar>) : undefined 
       return (
-        <View style={{flex:1}}>
-          <TextInput></TextInput>
-          <AttachmentGrid 
-            styles={styles.attachmentGrid} 
-            onClickDetail={() => {
-              navigator.push(routes[1])
-            }}
-          />
-          {sideBar}
-        </View>
+        <AttachmentView 
+          onClickAttachmentItem={() => navigator.push(routes[1])}
+          showSideBar={this.state.showSideBar}
+          onClickSideBarShadow={this.toggleSideBar}
+        />
       )
     } else if (route.index === 1) {
       return <MailDetail />
     }
   }
   render() {
+    const sideBarStyle = this.state.showSideBar ? {left: 0} : undefined
     return (
+      <View style={styles.container}>
       <Navigator
         initialRoute={routes[0]}
         initialRouteStack={routes}
@@ -68,13 +63,14 @@ class App extends Component {
               LeftButton: (route, navigator, index, navState) => {
                 if (route.index === 0) {
                   return (
-                    <TouchableHighlight onPress={this.toggleSideBar}>
+                    <TouchableHighlight onPress={this.toggleSideBar} underlayColor='#ccc'>
                       <Image source={menuImg}/>
                     </TouchableHighlight>
                   )
                 } else if (route.index === 1) {
                    return (
-                    <TouchableHighlight onPress={() => navigator.pop()}>
+                    <TouchableHighlight onPress={() => navigator.pop()}
+                    underlayColor='#ccc'>
                       <Image source={backImg}/>
                     </TouchableHighlight>
                   )
@@ -90,6 +86,8 @@ class App extends Component {
         }
         style={styles.navigator}
       />
+      <SideBar show={this.state.showSideBar} onClickShadow={this.toggleSideBar}/>
+      </View>
     )
   }
 }
@@ -97,6 +95,9 @@ class App extends Component {
 const windowSize = Dimensions.get('window')
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   navigator: {
     paddingTop: 50,
     backgroundColor: '#eee',
@@ -112,18 +113,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
     padding: 15,
-  },
-  attachmentGrid: {
-    flex: 1,
-  },
-  leftPanel: {
-    flex: 1,
-    flexDirection: 'row',
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    width: windowSize.width,
-    height: windowSize.height - 60,
   },
 })
 export default App

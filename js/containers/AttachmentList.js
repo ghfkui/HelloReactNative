@@ -22,7 +22,7 @@ const genRows = function() {
   return datablob
 }
 
-class AttachmentGrid extends Component {
+class AttachmentList extends Component {
   constructor(props) {
     super(props)
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -32,7 +32,7 @@ class AttachmentGrid extends Component {
   }
   render() {
     return (
-      <ListView style={this.props.styles}
+      <ListView
         contentContainerStyle={styles.list}
         dataSource={this.state.dataSource}
         initialListSize={21}
@@ -73,4 +73,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default AttachmentGrid
+export default AttachmentList

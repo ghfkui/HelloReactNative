@@ -20,7 +20,7 @@ class AttachmentItem extends Component {
       from,
       onClickImage, 
       onClickDetail, 
-      imgSource 
+      imgSource,
     } = this.props
     return (
       <View style={styles.container}>
